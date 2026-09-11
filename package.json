@@ -1,0 +1,118 @@
+{
+  "name": "dsh-skill-preferences",
+  "version": "0.1.0",
+  "description": "Enable and disable DSH skills from user settings, without modifying DSH",
+  "license": "MIT",
+  "author": "Zhiwen Chen <zc679087@gmail.com>",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zc679087/dsh-skill-preferences.git"
+  },
+  "bugs": {
+    "url": "https://github.com/zc679087/dsh-skill-preferences/issues"
+  },
+  "homepage": "https://github.com/zc679087/dsh-skill-preferences#readme",
+  "type": "module",
+  "main": "lib/index.js",
+  "types": "lib/types/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./lib/types/index.d.ts",
+      "default": "./lib/index.js"
+    },
+    "./types": {
+      "types": "./lib/types/types.d.ts",
+      "default": "./lib/types.js"
+    },
+    "./package.json": "./package.json",
+    "./client": {
+      "types": "./lib/types/client/index.d.ts",
+      "default": "./lib/client.js"
+    },
+    "./preset": {
+      "types": "./lib/types/preset.d.ts",
+      "default": "./lib/preset.js"
+    }
+  },
+  "files": [
+    "lib/*.js",
+    "lib/*.js.map",
+    "lib/types/**/*.d.ts",
+    "!lib/client/**/*.js",
+    "README.md",
+    "LICENSE"
+  ],
+  "scripts": {
+    "build": "tsc -b && tsdown",
+    "test": "vitest run",
+    "typecheck": "tsc -b --noEmit false --emitDeclarationOnly false",
+    "bundle": "tsdown",
+    "prepublishOnly": "npm run build && npm test"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "peerDependencies": {
+    "@deepseek-ai/dsh-settings": ">=0.0.1-rc.1",
+    "@deepseek-ai/dsh-skill": ">=0.0.1-rc.1",
+    "@deepseek-ai/dsh-scope": ">=0.0.1-rc.1",
+    "@deepseek-ai/cordis": "^4.0.0",
+    "@deepseek-ai/schemastery": "^3.18.0",
+    "@deepseek-ai/dsh-typert-protocol": ">=0.0.1-rc.1",
+    "@deepseek-ai/dsh-client-locale": ">=0.0.1-rc.1",
+    "@deepseek-ai/dsh-client-runtime": ">=0.0.1-rc.1",
+    "@deepseek-ai/dsh-client-ui-settings": ">=0.0.1-rc.1",
+    "@deepseek-ai/dsh-client-ui-slots": ">=0.0.1-rc.1",
+    "@deepseek-ai/dsh-api-remotes": ">=0.0.1-rc.1",
+    "react": "^18.2.0"
+  },
+  "devDependencies": {
+    "@deepseek-ai/dsh-settings": "*",
+    "@deepseek-ai/dsh-skill": "*",
+    "@deepseek-ai/dsh-scope": "*",
+    "@deepseek-ai/cordis": "*",
+    "@deepseek-ai/schemastery": "*",
+    "typescript": "^5.7.0",
+    "vitest": "^4.0.0",
+    "@deepseek-ai/dsh-typert-protocol": "*",
+    "@deepseek-ai/dsh-typert-registry": "*",
+    "@deepseek-ai/dsh-api-gateway": "*",
+    "@deepseek-ai/dsh-client-locale": "*",
+    "@deepseek-ai/dsh-client-runtime": "*",
+    "@deepseek-ai/dsh-client-ui-settings": "*",
+    "@deepseek-ai/dsh-client-ui-slots": "*",
+    "@deepseek-ai/dsh-client-test-runtime": "*",
+    "@deepseek-ai/dsh-api-remotes": "*",
+    "@testing-library/react": "^16.1.0",
+    "@types/react": "~18.3.1",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "tsdown": "*",
+    "lightningcss": "*"
+  },
+  "dsh": {
+    "client": {
+      "platform": "web",
+      "inject": [
+        "@deepseek-ai/dsh-api-remotes",
+        "@deepseek-ai/dsh-client-runtime",
+        "@deepseek-ai/dsh-client-ui-settings",
+        "@deepseek-ai/dsh-client-locale"
+      ]
+    }
+  },
+  "dependencies": {
+    "zod": "^4.4.3"
+  },
+  "keywords": [
+    "dsh",
+    "deepseek-harness",
+    "cordis",
+    "cordis-plugin",
+    "skills",
+    "agent"
+  ],
+  "engines": {
+    "node": "^22.19 || >=24"
+  }
+}
