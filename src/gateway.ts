@@ -21,7 +21,7 @@ import { isModelInvocable, isUserInvocable, type SkillSummary } from '@deepseek-
 import { SKILL_PREFERENCES_NAMESPACE } from './config.ts'
 import type { SkillPreferencesPolicy } from './policy.ts'
 import { PROVIDER_NAME } from './provider.ts'
-import type { CatalogHint, SkillPreferenceList, SkillPreferenceRow } from './types.ts'
+import { isValidSkillName, type CatalogHint, type SkillPreferenceList, type SkillPreferenceRow } from './types.ts'
 
 /** Arguments accepted by `skillPreferences/setEnabled`. */
 export interface SetEnabledInput {
@@ -84,6 +84,10 @@ export class SkillPreferencesGateway extends TypertRemoteService {
    */
   @Remote
   async setEnabled(change: SetEnabledInput): Promise<SkillPreferenceList> {
+    if (!isValidSkillName(change.name)) {
+      throw new TypeError(`Invalid skill name "${change.name}".`)
+    }
+
     const config = this.handle.current()
     const disabled = new Set(config.disabled)
     const hints: Record<string, CatalogHint> = { ...config.hints }
@@ -95,7 +99,10 @@ export class SkillPreferencesGateway extends TypertRemoteService {
       // Read before writing: while the skill is still enabled its real
       // metadata is reachable, and after suppression it is not.
       const summary = (await this.rows(change.cwd)).find(row => row.name === change.name)
-      if (summary !== undefined && !summary.disabled) {
+      if (summary === undefined) {
+        throw new Error(`Cannot disable unavailable skill "${change.name}".`)
+      }
+      if (!summary.disabled) {
         hints[change.name] = { description: summary.description, source: summary.source }
       }
       disabled.add(change.name)

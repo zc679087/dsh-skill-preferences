@@ -16,6 +16,7 @@
  */
 
 import { z } from 'zod'
+import { SKILL_NAME_PATTERN } from './types.ts'
 
 const rowSchema = z.object({
   name: z.string(),
@@ -36,7 +37,7 @@ const querySchema = z.object({
 })
 
 const changeSchema = z.object({
-  name: z.string(),
+  name: z.string().regex(SKILL_NAME_PATTERN),
   enabled: z.boolean(),
   cwd: z.string().optional(),
 })

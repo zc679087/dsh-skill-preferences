@@ -135,6 +135,7 @@ export function SkillPreferencesTab({ list, setEnabled, t }: SkillPreferencesTab
                       {row.disabled ? t('disabled') : t('enabled')}
                     </span>
                     <button
+                      className={css.toggle}
                       type="button"
                       role="switch"
                       aria-checked={!row.disabled}
@@ -142,7 +143,7 @@ export function SkillPreferencesTab({ list, setEnabled, t }: SkillPreferencesTab
                       disabled={pending !== null}
                       onClick={() => { toggle(row) }}
                     >
-                      {row.disabled ? t('enabled') : t('disabled')}
+                      <span className={css.toggleThumb} aria-hidden="true" />
                     </button>
                   </span>
                 </li>

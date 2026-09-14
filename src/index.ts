@@ -45,14 +45,10 @@ export const inject = ['skills']
  */
 export function apply(ctx: Context, config: Config): void {
   let current: () => Config = () => config
-  // Only valid while the exact registration below is live; the registry drops
-  // the call otherwise, so no guard is needed here.
-  let invalidate: () => void = () => {}
 
   const policy = new SkillPreferencesPolicy(ctx, () => current())
 
   ctx.skills.registerProvider((control) => {
-    invalidate = control.invalidate
     ctx.effect(() => policy.addInvalidator(control.invalidate), 'skill-preferences: invalidator')
     return createSuppressionProvider(() => current())
   })
@@ -68,7 +64,6 @@ export function apply(ctx: Context, config: Config): void {
       // Every enforcing layer refreshes, not only the host's own: a preset row
       // registers its provider into that preset's layer.
       policy.notify()
-      invalidate()
     },
   })
 

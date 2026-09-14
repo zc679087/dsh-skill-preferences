@@ -6,13 +6,14 @@
 
 import z from '@deepseek-ai/schemastery'
 import type Schema from '@deepseek-ai/schemastery'
-import type { CatalogHint } from './types.ts'
+import { SKILL_NAME_PATTERN, type CatalogHint } from './types.ts'
 
 /** The resolved `skill-preferences` settings section. */
 export interface Config {
   /**
    * Skill names the user has turned off. This list is the only authority for
-   * enforcement; a name that matches no discovered skill stays inert.
+   * enforcement. The settings face only adds names present in its catalog;
+   * names left by manual or older configuration stay inert.
    */
   readonly disabled: string[]
   /**
@@ -30,7 +31,7 @@ const hint: Schema<CatalogHint> = z.object({
 
 /** Schema resolving the `skill-preferences` settings section. */
 export const Config: Schema<Config> = z.object({
-  disabled: z.array(z.string()).default([]),
+  disabled: z.array(z.string().min(1).pattern(SKILL_NAME_PATTERN)).default([]),
   hints: z.dict(hint).default({}),
 })
 

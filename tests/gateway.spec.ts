@@ -122,4 +122,18 @@ describe('skillPreferences Remote face', () => {
     // Re-disabling must not overwrite the hint captured while it was enabled.
     expect(find(skills, 'pdf').description).toBe('Real pdf description.')
   })
+
+  it('rejects disabling a skill that is not in the current catalog', async () => {
+    const { face } = await bench()
+
+    await expect(face.setEnabled({ name: 'ghost-skill', enabled: false }))
+      .rejects.toThrow('Cannot disable unavailable skill "ghost-skill".')
+  })
+
+  it('rejects an invalid skill name before writing settings', async () => {
+    const { face } = await bench()
+
+    await expect(face.setEnabled({ name: 'Not A Skill', enabled: false }))
+      .rejects.toThrow('Invalid skill name "Not A Skill".')
+  })
 })

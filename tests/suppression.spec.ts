@@ -11,6 +11,7 @@ import SkillRegistry, {
 } from '@deepseek-ai/dsh-skill'
 import * as plugin from '../src/index.ts'
 import type { Config } from '../src/config.ts'
+import { createSuppressionProvider } from '../src/provider.ts'
 
 /** Stands in for a packaged provider: bundled rank, both surfaces open. */
 function realProvider(names: string[]): SkillProvider {
@@ -106,6 +107,14 @@ describe('skill-preferences suppression', () => {
     expect(isModelInvocable(ghost) || isUserInvocable(ghost)).toBe(false)
     const definition = await ctx.skills.get('ghost-skill')
     expect(isModelInvocable(definition!) || isUserInvocable(definition!)).toBe(false)
+  })
+
+  it('deduplicates names left by hand-edited settings', async () => {
+    const provider = createSuppressionProvider(() => entry(['pdf', 'pdf']))
+
+    const candidates = await provider.list({})
+
+    expect(candidates.map(candidate => candidate.name)).toEqual(['pdf'])
   })
 
   it('restores the real skill when the plugin is unloaded', async () => {

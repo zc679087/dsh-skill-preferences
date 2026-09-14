@@ -58,6 +58,9 @@ describe('SkillPreferencesTab', () => {
     expect(document.querySelector('[data-skill="hf-cli"]')?.getAttribute('data-disabled')).toBe('true')
     expect(toggleFor('pdf').getAttribute('aria-checked')).toBe('true')
     expect(toggleFor('hf-cli').getAttribute('aria-checked')).toBe('false')
+    expect(toggleFor('pdf').textContent).toBe('')
+    expect(document.querySelector('[data-skill="pdf"] [data-enabled="true"]')?.textContent).toBe('enabled')
+    expect(document.querySelector('[data-skill="hf-cli"] [data-enabled="false"]')?.textContent).toBe('disabled')
   })
 
   it('turns a skill off through the face and renders what the host returned', async () => {
@@ -112,6 +115,12 @@ describe('SkillPreferencesTab', () => {
     await act(async () => { retry.click() })
 
     await screen.findByText('pdf')
+  })
+
+  it('renders the configuration hint when no skills are discovered', async () => {
+    mount({ list: () => Promise.resolve(table()), setEnabled: vi.fn() })
+
+    await screen.findByText('empty')
   })
 
   it('filters rows by the search query', async () => {

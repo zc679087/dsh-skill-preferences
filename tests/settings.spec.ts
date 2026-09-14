@@ -61,7 +61,7 @@ describe('skill-preferences settings integration', () => {
 
     await ctx.settings.update(NS, { disabled: ['pdf'] })
 
-    expect(onChange).toHaveBeenCalled()
+    expect(onChange).toHaveBeenCalledTimes(1)
     const denied = row(await ctx.skills.list(), 'pdf')
     expect(denied.provider).toBe('skill-preferences')
     expect(isModelInvocable(denied)).toBe(false)

@@ -6,6 +6,14 @@
  * @module dsh-skill-preferences/types
  */
 
+/** Public DSH skill-name grammar. */
+export const SKILL_NAME_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/
+
+/** Return whether a remote or persisted value can name a DSH skill. */
+export function isValidSkillName(name: string): boolean {
+  return SKILL_NAME_PATTERN.test(name)
+}
+
 /**
  * Display metadata captured at the moment a skill was disabled.
  *

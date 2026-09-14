@@ -51,7 +51,10 @@ export function createSuppressionProvider(current: () => Config): SkillProvider 
     name: PROVIDER_NAME,
     list(_options: SkillLookupOptions): Promise<SkillCandidate[]> {
       const config = current()
-      return Promise.resolve(config.disabled.map((name) => {
+      // Settings may have been edited by hand or written by an older release.
+      // Keep one deterministic suppression candidate per name.
+      const disabled = [...new Set(config.disabled)].sort()
+      return Promise.resolve(disabled.map((name) => {
         const hint = config.hints[name]
         return {
           name,
